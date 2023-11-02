@@ -1,0 +1,8 @@
+constants.py
+.env
+env/
+__pycache__/
+.idea
+.DS_Store
+.chroma/
+.vscode
