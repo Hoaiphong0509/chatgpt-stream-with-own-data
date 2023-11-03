@@ -70,7 +70,12 @@ def chat(query):
     # persist_path = os.path.join(current_dir, '../..', 'persist')
 
     persist_path = app_dir + "\\persist"
-    index = VectorstoreIndexCreator().from_persistent_index(path=persist_path)
+    
+    vectorestoreindexcreator = VectorstoreIndexCreator()
+    vectorstore = vectorestoreindexcreator.vectorstore_cls(persist_directory=persist_path, embedding_function=vectorestoreindexcreator.embedding)
+    
+    index = VectorStoreIndexWrapper(vectorstore=vectorstore)
+    # index = VectorstoreIndexCreator().from_persistent_index(path=persist_path)
 
     chain = ConversationalRetrievalChain.from_llm(
         llm=ChatOpenAI(model="gpt-3.5-turbo"),
@@ -93,21 +98,18 @@ async def chat_stream(content: str) -> AsyncIterable[str]:
     # persist_path = os.path.join(current_dir, '../..', 'persist')
 
     persist_path = app_dir + "\\persist"
-    index = VectorstoreIndexCreator().from_persistent_index(path=persist_path)
+    
+    vectorestoreindexcreator = VectorstoreIndexCreator()
+    vectorstore = vectorestoreindexcreator.vectorstore_cls(persist_directory=persist_path, embedding_function=vectorestoreindexcreator.embedding)
+    
+    index = VectorStoreIndexWrapper(vectorstore=vectorstore)
+    # index = VectorstoreIndexCreator().from_persistent_index(path=persist_path)
 
     callback = AsyncIteratorCallbackHandler()
 
     chatOpenAi = ChatOpenAI(
         model="gpt-3.5-turbo", streaming=True, verbose=True, callbacks=[callback]
     )
-    # kk = chatOpenAi.agenerate()
-
-    # model = ChatOpenAI(
-    #     model="gpt-3.5-turbo",
-    #     streaming=True,
-    #     verbose=True,
-    #     callbacks=[callback],
-    # )
 
     chain = ConversationalRetrievalChain.from_llm(
         llm=chatOpenAi,
